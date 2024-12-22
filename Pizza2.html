@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizza Paradise</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@3.1.0/dist/full.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <style>
+        .pizza-image {
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100" data-theme="cupcake">
+    <div id="app" class="container mx-auto px-4 py-8">
+        <h1 class="text-4xl font-bold text-center text-orange-600 mb-8">Pizza Paradise</h1>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+                <img src="./pizza.jpg" alt="Delicious Pizza" class="pizza-image mx-auto mb-4">
+                <h2 class="text-2xl font-bold mb-4 text-center">Customize Your Pizza</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label for="size" class="block text-gray-700 font-bold mb-2">Size</label>
+                        <select v-model="pizzaSize" id="size" class="select select-bordered w-full">
+                            <option value="small">Small</option>
+                            <option value="medium">Medium</option>
+                            <option value="large">Large</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">Toppings</label>
+                        <div class="flex flex-wrap space-x-2">
+                            <div v-for="(topping, index) in toppings" :key="index">
+                                <label :for="'topping-' + index" class="checkbox">
+                                    <input type="checkbox" :id="'topping-' + index" v-model="selectedToppings">
+                                    <span class="label-text">{{ topping }}</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button @click="addToCart" class="btn btn-outline btn-primary mt-4">Add to Cart</button>
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold mb-4 text-center">Order Summary</h2>
+                <div v-if="cart.length === 0" class="text-center">
+                    Your cart is empty.
+                </div>
+                <div v-else class="space-y-4">
+                    <div v-for="(item, index) in cart" :key="index" class="order-item">
+                        <p>Pizza Size: {{ item.size }}</p>
+                        <p>Toppings: {{ item.toppings.join(', ') }}</p>
+                        <p>Price: ${{ calculatePrice(item) }}</p>
+                    </div>
+                    <p class="text-xl font-bold">Total: ${{ calculateTotalPrice }}</p>
+                    <button @click="placeOrder" class="btn btn-primary btn-block" :disabled="cart.length === 0">Place Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                pizzaSize: 'medium',
+                toppings: ['Pepperoni', 'Mushrooms', 'Onions', 'Sausage', 'Extra Cheese'],
+                selectedToppings: [],
+                cart: [],
+                orderDetails: {
+                    name: '',
+                    address: '',
+                    phoneNumber: ''
+                }
+            },
+            computed: {
+                calculateTotalPrice() {
+                    return this.cart.reduce((total, item) => total + this.calculatePrice(item), 0);
+                },
+                displayOrderDetails() {
+                    return `
+                        Order Details:
+                        Name: ${this.orderDetails.name}
+                        Address: ${this.orderDetails.address}
+                        Phone Number: ${this.orderDetails.phoneNumber}
+                        Total: $${this.calculateTotalPrice}
+                    `;
+                }
+            },
+            methods: {
+                addToCart() {
+                    this.cart.push({
+                        size: this.pizzaSize,
+                        toppings: this.selectedToppings
+                    });
+                    this.pizzaSize = 'medium'; // Reset size
+                    this.selectedToppings = []; // Reset toppings
+                },
+                calculatePrice(item) {
+                    let price = 0;
+                    if (item.size === 'small') {
+                        price = 10;
+                    } else if (item.size === 'medium') {
+                        price = 15;
+                    } else {
+                        price = 20;
+                    }
+                    price += item.toppings.length * 1; // $1 per topping
+                    return price;
+                },
+                placeOrder() {
+                    // Twilio API Integration
+                    // Send the order details via text message
+                    const accountSid = 'ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'; // Replace with your Account SID
+                    const authToken = 'your_auth_token'; // Replace with your Auth Token
+                    const client = require('twilio')(accountSid, authToken);
+
+                    client.messages
+                        .create({
+                            body: this.displayOrderDetails,
+                            from: '+11234567890', // Replace with your Twilio phone number
+                            to: '+1234567890' // Replace with the customer's phone number
+                        })
+                        .then((message) => console.log(message.sid))
+                        .done();
+
+                    // Confirmation logic
+                    alert('Your order has been placed!');
+                    // Reset cart
+                    this.cart = []; 
+                    // In a real application, you'd likely redirect or display a thank you message
+                }
+            }
+        });
+    </script>
+</body>
+</html>
