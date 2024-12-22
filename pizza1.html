@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizza Ordering App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4e6c2;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+        }
+        h1 {
+            text-align: center;
+            color: #d75a4a;
+        }
+        .pizza-image {
+            display: block;
+            margin: 0 auto 20px;
+            width: 200px;
+            border-radius: 50%;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        select, input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #d75a4a;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #b3473b;
+        }
+        .order-summary {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .order-summary h2 {
+            margin-top: 0;
+            color: #d75a4a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Order Your Pizza</h1>
+        <img src="https://via.placeholder.com/200x200?text=Pizza" alt="Pizza" class="pizza-image">
+        <form id="pizzaForm">
+            <div class="form-group">
+                <label for="size">Size:</label>
+                <select id="size" name="size">
+                    <option value="small">Small</option>
+                    <option value="medium">Medium</option>
+                    <option value="large">Large</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="toppings">Toppings:</label>
+                <input type="text" id="toppings" name="toppings" placeholder="e.g., Pepperoni, Mushrooms">
+            </div>
+            <div class="form-group">
+                <label for="quantity">Quantity:</label>
+                <input type="number" id="quantity" name="quantity" min="1" value="1">
+            </div>
+            <div class="form-group">
+                <label for="address">Delivery Address:</label>
+                <input type="text" id="address" name="address" required>
+            </div>
+            <button type="submit">Place Order</button>
+        </form>
+        <div class="order-summary" id="orderSummary" style="display: none;">
+            <h2>Order Summary</h2>
+            <p id="summaryText"></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('pizzaForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const size = document.getElementById('size').value;
+            const toppings = document.getElementById('toppings').value;
+            const quantity = document.getElementById('quantity').value;
+            const address = document.getElementById('address').value;
+
+            const summaryText = `You ordered ${quantity} ${size} pizza(s) with ${toppings}. Delivery to: ${address}`;
+            document.getElementById('summaryText').innerText = summaryText;
+            document.getElementById('orderSummary').style.display = 'block';
+
+            // Here you would integrate Twilio API to send the order details via text message
+            console.log('Order placed:', summaryText);
+        });
+    </script>
+</body>
+</html>
