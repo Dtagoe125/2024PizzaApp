@@ -1,0 +1,75 @@
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            pizzaSize: 'medium',
+            toppings: ['Pepperoni', 'Mushrooms', 'Onions', 'Sausage', 'Extra Cheese'],
+            selectedToppings: [],
+            cart: [],
+            orderDetails: {
+                name: '',
+                address: '',
+                phoneNumber: ''
+            }
+        },
+        computed: {
+            calculateTotalPrice() {
+                return this.cart.reduce((total, item) => total + this.calculatePrice(item), 0);
+            },
+            displayOrderDetails() {
+                return `
+                    Order Details:
+                    Name: ${this.orderDetails.name}
+                    Address: ${this.orderDetails.address}
+                    Phone Number: ${this.orderDetails.phoneNumber}
+                    Total: $${this.calculateTotalPrice}
+                `;
+            }
+        },
+        methods: {
+            addToCart() {
+                this.cart.push({
+                    size: this.pizzaSize,
+                    toppings: this.selectedToppings
+                });
+                this.pizzaSize = 'medium'; // Reset size
+                this.selectedToppings = []; // Reset toppings
+            },
+            calculatePrice(item) {
+                let price = 0;
+                if (item.size === 'small') {
+                    price = 10;
+                } else if (item.size === 'medium') {
+                    price = 15;
+                } else {
+                    price = 20;
+                }
+                price += item.toppings.length * 1; // $1 per topping
+                return price;
+            },
+            placeOrder() {
+                // Twilio API Integration
+                // Send the order details via text message
+                // Commented out Twilio API call for local testing
+                // const accountSid = 'ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'; // Replace with your Account SID
+                // const authToken = 'your_auth_token'; // Replace with your Auth Token
+                // const client = require('twilio')(accountSid, authToken);
+
+                // client.messages
+                //     .create({
+                //         body: this.displayOrderDetails,
+                //         from: '+11234567890', // Replace with your Twilio phone number
+                //         to: '+1234567890' // Replace with the customer's phone number
+                //     })
+                //     .then((message) => console.log(message.sid))
+                //     .done();
+
+                // Confirmation logic
+                alert('Your order has been placed!');
+                // Reset cart
+                this.cart = []; 
+                // In a real application, you'd likely redirect or display a thank you message
+            }
+        }
+    });
+</script>
