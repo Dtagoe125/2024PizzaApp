@@ -1,3 +1,47 @@
+## Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Configuration](#configuration)
+- [Usage](#usage)
+- [Testing](#testing)
+- [Project Structure](#project-structure)
+- [Technologies Used](#technologies-used)
+- [Future Enhancements](#future-enhancements)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Overview
+
+Pizza Paradise is a web-based application that allows users to customize their pizza by selecting size and toppings, add them to a cart, and place an order. The application uses Twilio to send order confirmations via SMS.
+
+This project serves as a practical example of using Vue.js for building interactive UIs, Tailwind CSS for styling, and integrating external APIs.
+
+## Features
+
+-   **Pizza Customization:**
+    -   Select pizza size (small, medium, large).
+    -   Choose multiple toppings using checkboxes.
+-   **Cart Management:**
+    -   Add customized pizzas to a cart.
+    -   View cart items with size, toppings, and price.
+    -   Calculate the total order price.
+-   **Order Placement:**
+    -   Collects user's name, address, and phone number.
+    -   Validates input fields.
+    -   Places order with a loading state.
+    -   Sends SMS confirmation via Twilio.
+    -   Displays order confirmation/error message to the user.
+-   **User-Friendly UI:**
+    -   Responsive design using Tailwind CSS.
+    -   Error messages shown for invalid input.
+    -   Loading states and success message.
+-   **Unit Tests:**
+    -   Includes Jest tests to test the methods of the components
+ 
 
 ## Technologies Used
 
